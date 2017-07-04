@@ -1,35 +1,31 @@
 import os
-
-import requests
-import oauth2 as oauth
 import urlparse
+import oauth2 as oauth
+import requests
+from os import sys, path
+sys.path.append(path.dirname(path.dirname(path.abspath(""))))
+from Chapter2.support.Config import Config
+from Chapter2.support.OAuthTokenSecret import OAuthTokenSecret
 
-from requests_oauthlib import OAuth1
-
-from support.Config import Config
-from support.Constants import consumer_key,consumer_secret
-from support.OAuthTokenSecret import OAuthTokenSecret
 
 
 class OAuthExample(object):
 
     def __init__(self):
-        self.confObj= Config(os.path.abspath("../../")+"/")
+        self.confObj= Config(os.path.realpath("../../")+"/")
         self.config= self.confObj.data
         self.UserAccessToken = self.config['UserAccessToken']
         self.UserAccessSecret = self.config['UserAccessSecret']
         self.consumer_key = self.config['consumer_key']
         self.consumer_secret = self.config['consumer_secret']
+        print self.UserAccessSecret
         if not self.TestOAuth():
             self.GetUserAccessKeySecret()
             self.TestOAuth()
 
     def TestOAuth(self):
-        au=OAuth1(self.consumer_key,
-               client_secret=self.consumer_secret,
-               resource_owner_key=self.UserAccessToken,
-               resource_owner_secret=self.UserAccessSecret)
-        r = requests.get(url="https://api.twitter.com/1.1/users/show.json?screen_name=anjoy92", auth=au)
+        self.authObj=OAuthTokenSecret(self.consumer_key,self.consumer_secret,self.UserAccessToken,self.UserAccessSecret)
+        r = requests.get(url="https://api.twitter.com/1.1/users/show.json?screen_name=anjoy92", auth=self.authObj.auth)
         print r.json()
         return not r.json().has_key('errors')
 
@@ -102,5 +98,7 @@ class OAuthExample(object):
         self.config['UserAccessToken'] = access_token['oauth_token']
         self.config['UserAccessSecret'] = access_token['oauth_token_secret']
         self.confObj.Write()
+
+
 
 obj=OAuthExample()
