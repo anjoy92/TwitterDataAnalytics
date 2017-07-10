@@ -18,7 +18,7 @@ class OAuthExample(object):
         self.UserAccessSecret = self.config['UserAccessSecret']
         self.consumer_key = self.config['consumer_key']
         self.consumer_secret = self.config['consumer_secret']
-        print self.UserAccessSecret
+        #print self.UserAccessSecret
         if not self.TestOAuth():
             self.GetUserAccessKeySecret()
             self.TestOAuth()
@@ -26,7 +26,7 @@ class OAuthExample(object):
     def TestOAuth(self):
         self.authObj=OAuthTokenSecret(self.consumer_key,self.consumer_secret,self.UserAccessToken,self.UserAccessSecret)
         r = requests.get(url="https://api.twitter.com/1.1/users/show.json?screen_name=anjoy92", auth=self.authObj.auth)
-        print r.json()
+        #print r.json()
         return not r.json().has_key('errors')
 
     def GetUserAccessKeySecret(self):
@@ -99,6 +99,3 @@ class OAuthExample(object):
         self.config['UserAccessSecret'] = access_token['oauth_token_secret']
         self.confObj.Write()
 
-
-
-obj=OAuthExample()
