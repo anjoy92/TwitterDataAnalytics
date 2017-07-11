@@ -71,7 +71,6 @@ class CreateD3Network(object):
                 ht.color = hashtagcoll[key]["color"]
                 ht.tags = hashtagcoll[key]["hts"]
                 hashtags.append(ht)
-
         return hashtags
 
     #
@@ -137,7 +136,6 @@ class CreateD3Network(object):
         """ generated source for method ConvertTweetsToDiffusionPath """
         userconnections = {}
         hashtagarray = self.ConvertJSONArrayToArray(hashtags)
-        print hashtagarray
         br = None
         with open(inFilename) as fp:
             for line in fp:
@@ -148,7 +146,7 @@ class CreateD3Network(object):
                 for ht in hashtagarray:
                     tags=ht.tags
                     for tg in tags:
-                        if text.__contains__(tg):
+                        if tg in text:
                             groupmatch = True
                             break
                     if groupmatch:
@@ -243,7 +241,7 @@ class CreateD3Network(object):
         else:
             nodes_to_visit = nodes.size()
         prunednodes = {}
-        nodeidlist = []
+        nodeidlist = {}
         nodeid = 0
         for k in range(nodes_to_visit):
             nd = nodes[k]
@@ -251,7 +249,7 @@ class CreateD3Network(object):
             rtnodes = GetNextHopConnections(userconnections,nd,{})
             names = set(rtnodes.keys())
             for n in names:
-                if n in prunednodes:
+                if n not in prunednodes:
                     newnode = rtnodes[n]
                     if newnode.size>0:
                         prunednodes[n]=newnode
@@ -351,15 +349,16 @@ def main( args):
     ja=["zuccotti"]
     obj["hts"] = ja
     jobj["Group 1"]=obj
-    obj.clear()
-    obj["color"] ="#0FFF00"
-    ja = ["#nypd"]
-    obj["hts"]= ja
-    jobj["Group 2"]=obj
+    obj2={}
+    obj2["color"] ="#0FFF00"
+    ja2 = ["#nypd"]
+    obj2["hts"]= ja2
+    jobj["Group 2"]=obj2
 
     filename = "../ows.json"
-    nodes = cdn.ConvertTweetsToDiffusionPath(filename, 7, jobj, 5)
+
     print jobj
+    nodes = cdn.ConvertTweetsToDiffusionPath(filename, 7, jobj, 5)
 
 
 if __name__ == '__main__':
