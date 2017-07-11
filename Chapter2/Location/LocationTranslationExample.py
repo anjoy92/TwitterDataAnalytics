@@ -1,12 +1,7 @@
 from os import sys, path
 import urllib
-import json
-import time
 sys.path.append(path.dirname(path.dirname(path.abspath(""))))
-from Chapter2.openauthentication.OAuthExample import OAuthExample
 from Chapter2.support.Location import Location
-from Chapter2.support.InfoType import InfoType
-from Chapter2.support.APIType import APIType
 import requests
 
 

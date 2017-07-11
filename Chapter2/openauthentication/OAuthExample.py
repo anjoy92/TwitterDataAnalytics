@@ -32,8 +32,7 @@ class OAuthExample(object):
         self.authObj = OAuthTokenSecret(self.consumer_key,
                                         self.consumer_secret, self.UserAccessToken,
                                         self.UserAccessSecret)
-        r = \
-            requests.get(url='https://api.twitter.com/1.1/users/show.json?screen_name=anjoy92'
+        r = requests.get(url='https://api.twitter.com/1.1/users/show.json?screen_name=anjoy92'
                          , auth=self.authObj.auth)
 
         # print r.json()
