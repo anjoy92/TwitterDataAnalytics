@@ -1,1 +1,4 @@
 oauth2
+stop_words
+nltk
+gensim
