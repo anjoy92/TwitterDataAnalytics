@@ -1,3 +1,5 @@
+from os import sys, path
+sys.path.append(path.dirname(path.dirname(path.abspath(""))))
 import json
 import re
 from collections import Counter

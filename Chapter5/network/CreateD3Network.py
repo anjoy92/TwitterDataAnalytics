@@ -1,5 +1,6 @@
 import math
-
+from os import sys, path
+sys.path.append(path.dirname(path.dirname(path.abspath(""))))
 from Chapter5.support.HashTagDS import HashTagDS
 from Chapter5.support.NetworkNode import NetworkNode
 from Chapter5.support.ToNodeInfo import ToNodeInfo

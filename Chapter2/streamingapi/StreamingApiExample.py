@@ -10,7 +10,7 @@ import requests
 
 class StreamingApiExample(object):
     def __init__(self):
-        self.RECORDS_TO_PROCESS = 1000
+        self.RECORDS_TO_PROCESS = 30
         self.MAX_KEYWORDS = 400
         self.MAX_USERS = 5000
         self.MAX_GEOBOXES = 25
@@ -51,13 +51,11 @@ class StreamingApiExample(object):
             if len(rawtweets)>=self.RECORDS_TO_PROCESS:
                 nooftweetsuploaded = nooftweetsuploaded + self.RECORDS_TO_PROCESS
                 outFl = filename + "tweets_" + str(time.time()) + ".json"
-                print "Writting "+ str(self.RECORDS_TO_PROCESS) + " number of tweets to "+outFl
+                print "Writing "+ str(self.RECORDS_TO_PROCESS) + " number of tweets to "+outFl
                 with open(outFl, 'w') as outfile:
                     outfile.write("\n".join(rawtweets))
                 print "Written "+ str(nooftweetsuploaded) + " records so far"
                 rawtweets = []
-
-
 
 def main(args):
     sae = StreamingApiExample()
