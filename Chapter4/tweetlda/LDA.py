@@ -12,7 +12,7 @@ def main(args):
     NUM_TOPICS = 25
     NOM_WORDS_TO_ANALYZE = 25
     WORKERS = 10
-    infilename = "../testows.json"
+    infilename = "../lda.json"
 
     if len(args)>0:
         infilename = args[0]
