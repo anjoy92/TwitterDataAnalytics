@@ -1,46 +1,56 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """
-high level support for doing this and that.
+Creates user access token and secret and saves it into config.json. Also verifies the key.
+__author__ = "Shobhit Sharma"
+__copyright__ = "TweetTracker. Copyright (c) Arizona Board of Regents on behalf of Arizona State University"
 """
+
 import os
 import urlparse
 from os import sys, path
+
+sys.path.append(path.dirname(path.dirname(path.abspath(''))))
 import oauth2 as oauth
 import requests
-sys.path.append(path.dirname(path.dirname(path.abspath(''))))
 from Chapter2.support.Config import Config
 from Chapter2.support.OAuthTokenSecret import OAuthTokenSecret
+import argparse
 
 
 class OAuthExample(object):
     def __init__(self):
         self.confObj = Config(os.path.realpath('../../') + '/')
         self.config = self.confObj.data
-        self.UserAccessToken = self.config['UserAccessToken']
-        self.UserAccessSecret = self.config['UserAccessSecret']
+        self.user_access_token = self.config['user_access_token']
+        self.user_access_secret = self.config['user_access_secret']
         self.consumer_key = self.config['consumer_key']
         self.consumer_secret = self.config['consumer_secret']
+        self.authObj = ""
+        self.worked = False
 
-        # print self.UserAccessSecret
+        while not self.test_o_auth():
+            self.get_user_access_key_secret()
+        self.worked = True
 
-        if not self.TestOAuth():
-            self.GetUserAccessKeySecret()
-            self.TestOAuth()
-
-    def TestOAuth(self):
+    def test_o_auth(self):
+        """
+        If the keys worked or not.
+        :rtype: bool
+        """
         self.authObj = OAuthTokenSecret(self.consumer_key,
-                                        self.consumer_secret, self.UserAccessToken,
-                                        self.UserAccessSecret)
+                                        self.consumer_secret, self.user_access_token,
+                                        self.user_access_secret)
         r = requests.get(url='https://api.twitter.com/1.1/users/show.json?screen_name=anjoy92'
                          , auth=self.authObj.auth)
 
-        # print r.json()
-
         return not r.json().has_key('errors')
 
-    def GetUserAccessKeySecret(self):
-
+    def get_user_access_key_secret(self):
+        """
+        Method to request for keys.
+        :return: None
+        """
         consumer_key = self.consumer_key
         consumer_secret = self.consumer_secret
 
@@ -110,12 +120,27 @@ class OAuthExample(object):
         print 'You may now access protected resources using the access tokens above.'
         print
 
-        self.UserAccessToken = access_token['oauth_token']
-        self.UserAccessSecret = access_token['oauth_token_secret']
-        self.config['UserAccessToken'] = access_token['oauth_token']
-        self.config['UserAccessSecret'] = \
+        self.user_access_token = access_token['oauth_token']
+        self.user_access_secret = access_token['oauth_token_secret']
+        self.config['user_access_token'] = access_token['oauth_token']
+        self.config['user_access_secret'] = \
             access_token['oauth_token_secret']
         self.confObj.Write()
 
 
+def main(args):
+    """
+    Creates user access token and secret and save into config.json. Also verifies the key.
+    """
+    parser = argparse.ArgumentParser(
+        description='''Creates user access token and secret and saves it into config.json. Also verifies the key.''',
+        epilog="""TweetTracker. Copyright (c) Arizona Board of Regents on behalf of Arizona State University\n@author Shobhit Sharma""",
+        formatter_class=argparse.RawTextHelpFormatter)
+    argsi = parser.parse_args()
+    lte = OAuthExample()
+    if lte.worked:
+        print "Key is good and saved inside config.json"
 
+
+if __name__ == "__main__":
+    main(sys.argv)

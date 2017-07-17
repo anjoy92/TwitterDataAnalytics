@@ -5,6 +5,9 @@ import re
 from collections import Counter
 
 class ExtractUserTagNetwork(object):
+    """
+    
+    """
     def __init__(self):
         self.DEF_INFILENAME= "../ows.json"
 

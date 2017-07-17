@@ -1,6 +1,6 @@
 {
-    "UserAccessSecret": "lEftplmzq0Mn8HgygHnlDERI7MJ7TcjzX4DTQ0qvwYZG1", 
-    "UserAccessToken": "3746388736-JDPGK6qvv7EtyVPhtb2zj00kPqf1oRh2GAsYo87", 
-    "consumer_key": "L8CRRCUoRl3xcZ9bdrfUw", 
-    "consumer_secret": "PPCTObQGbGm1gkNvdJiTPKhoTksG787RTBwardkbM"
+    "consumer_key": "L8CRRCUoRl3xcZ9bdrfUw",
+    "consumer_secret": "PPCTObQGbGm1gkNvdJiTPKhoTksG787RTBwardkbM", 
+    "user_access_secret": "??",
+    "user_access_token": "??"
 }

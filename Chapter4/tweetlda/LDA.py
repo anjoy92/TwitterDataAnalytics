@@ -1,3 +1,5 @@
+from os import sys, path
+sys.path.append(path.dirname(path.dirname(path.abspath(""))))
 from nltk.tokenize import RegexpTokenizer
 from stop_words import get_stop_words
 from nltk.stem.porter import PorterStemmer
