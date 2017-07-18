@@ -1,23 +1,44 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+"""
+Performs LDA - Latent Dirichlet allocation ( Topic Modeling) on the text of the tweets given in the tweet file.
+__author__ = "Shobhit Sharma"
+__copyright__ = "TweetTracker. Copyright (c) Arizona Board of Regents on behalf of Arizona State University"
+"""
+import argparse
 from os import sys, path
+
 sys.path.append(path.dirname(path.dirname(path.abspath(""))))
 from nltk.tokenize import RegexpTokenizer
 from stop_words import get_stop_words
 from nltk.stem.porter import PorterStemmer
 from gensim import corpora, models
-import gensim
 import sys
 import json
 
 
 def main(args):
-    ITERATIONS = 10
-    NUM_TOPICS = 25
-    NOM_WORDS_TO_ANALYZE = 25
-    WORKERS = 10
-    infilename = "../lda.json"
+    parser = argparse.ArgumentParser(
+        description='''Creates a simple retweeted graph network from the json file provided. ''',
+        epilog="""TweetTracker. Copyright (c) Arizona Board of Regents on behalf of Arizona State University\n@author Shobhit Sharma""",
+        formatter_class=argparse.RawTextHelpFormatter)
+    parser.add_argument('-i', nargs="?", default="../lda.json",
+                        help='Name of the input file containing tweets')
+    parser.add_argument('-c', nargs="?", default=10,
+                        help='Number of Iterations on LDA')
+    parser.add_argument('-n', nargs="?", default=25,
+                        help='Number of Topics')
+    parser.add_argument('-w', nargs="?", default=25,
+                        help='Number of Words to analyze')
+    parser.add_argument('-t', nargs="?", default=10,
+                        help='Number of Worker Threads')
+    argsi = parser.parse_args()
 
-    if len(args)>0:
-        infilename = args[0]
+    iterations = argsi.c
+    num_topics = argsi.n
+    num_words_to_analyze = argsi.w
+    num_workers = argsi.t
+    infile_name = argsi.i
 
     tokenizer = RegexpTokenizer(r'\w+')
 
@@ -30,7 +51,7 @@ def main(args):
     # compile sample documents into a list
     doc_set = []
 
-    with open(infilename) as fp:
+    with open(infile_name) as fp:
         for temp in fp:
             jobj = json.loads(temp)
             doc_set.append(jobj["text"])
@@ -62,10 +83,13 @@ def main(args):
     corpus = [dictionary.doc2bow(text) for text in texts]
     print "started"
     # generate LDA model
-    #ldamodel = gensim.models.ldamodel.LdaModel(corpus, num_topics=NUM_TOPICS, id2word=dictionary, passes=ITERATIONS)
-    ldamodel = models.LdaMulticore(corpus, id2word=dictionary, num_topics=NUM_TOPICS, workers=WORKERS, passes=ITERATIONS)
-    for terms in ldamodel.print_topics(num_topics=NUM_TOPICS, num_words=NOM_WORDS_TO_ANALYZE):
-        print terms[0],"-",", ".join(terms[1].split('+'))
+    # ldamodel = gensim.models.ldamodel.LdaModel(corpus, num_topics=num_topics, id2word=dictionary, passes=ITERATIONS)
+
+    ldamodel = models.LdaMulticore(corpus, id2word=dictionary, num_topics=num_topics, workers=num_workers,
+                                   passes=iterations)
+    for terms in ldamodel.print_topics(num_topics=num_topics, num_words=num_words_to_analyze):
+        print terms[0], "-", ", ".join(terms[1].split('+'))
+
 
 if __name__ == "__main__":
     main(sys.argv[1:])
