@@ -6,6 +6,7 @@ __copyright__ = "TweetTracker. Copyright (c) Arizona Board of Regents on behalf 
 """
 import datetime
 
+
 class DateInfo(object):
     def __init__(self):
         self.d = datetime.time()

@@ -156,7 +156,7 @@ class NaiveBayesSentimentClassifier(object):
 
         conf -= self.sum_vector(label_probs)
 
-        return Classification().Classification(self.SENTIMENT_LABELS[max_label_idx], conf)
+        return classification().classification(self.SENTIMENT_LABELS[max_label_idx], conf)
 
     def print_word_occurs(self, sentIndex, topN):
         """

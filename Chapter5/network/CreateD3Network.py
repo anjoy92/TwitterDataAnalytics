@@ -1,3 +1,4 @@
+
 import math
 from os import sys, path
 sys.path.append(path.dirname(path.dirname(path.abspath(""))))
@@ -142,7 +143,7 @@ class CreateD3Network(object):
             for line in fp:
                 tweetobj = json.loads(line)
                 t=Tweet()
-                text = TextUtils().GetCleanText(tweetobj["text"]).lower()
+                text = TextUtils().get_clean_text(tweetobj["text"]).lower()
                 groupmatch = False
                 for ht in hashtagarray:
                     tags=ht.tags
@@ -165,7 +166,7 @@ class CreateD3Network(object):
                     fromusers = self.GetRTUsers(text)
                 if not fromusers:
                     continue
-                t.text = TextUtils().RemoveRTElements(text)
+                t.text = TextUtils().remove_rt_elements(text)
                 if "user" in tweetobj:
                     userobj = tweetobj["user"]
                     t.user = str(userobj["screen_name"]).lower()

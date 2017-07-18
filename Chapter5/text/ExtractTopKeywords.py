@@ -1,30 +1,41 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+"""
+Creates word cloud data for visualization from the tweet file provided.
+__author__ = "Shobhit Sharma"
+__copyright__ = "TweetTracker. Copyright (c) Arizona Board of Regents on behalf of Arizona State University"
+"""
+import argparse
 from os import sys, path
+
 sys.path.append(path.dirname(path.dirname(path.abspath(""))))
 import json
 import re
 from utils.TextUtils import TextUtils
 from utils.Tags import Tags
 
+
 class ExtractTopKeywords(object):
     def __init__(self):
         self.DEF_INFILENAME = "../ows.json"
         self.DEF_K = 60
 
-    def GetTopKeywords(self,inFilename,  K,  ignoreHashtags,  ignoreUsernames,  tu):
+    @staticmethod
+    def get_top_keywords(in_filename, K, ignore_hashtags, ignore_usernames, tu):
         words = {}
-        with open(inFilename) as fp:
+        with open(in_filename) as fp:
             for temp in fp:
                 tweetobj = json.loads(temp)
                 if "text" in tweetobj:
                     text = tweetobj["text"]
-                    text=re.sub("\\s+"," ",text.lower())
-                    tokens = tu.TokenizeText(text, ignoreHashtags, ignoreUsernames)
-                    keys =tokens.keys()
+                    text = re.sub("\\s+", " ", text.lower())
+                    tokens = tu.tokenize_text(text, ignore_hashtags, ignore_usernames)
+                    keys = tokens.keys()
                     for key in keys:
                         if key in words:
                             words[key] = words[key] + tokens[key]
                         else:
-                            words[key]= tokens[key]
+                            words[key] = tokens[key]
 
         keys = set(words.keys())
         tags = []
@@ -47,24 +58,32 @@ class ExtractTopKeywords(object):
         return cloudwords
 
 
-
 def main(args):
     etk = ExtractTopKeywords()
     tu = TextUtils()
-    tu.LoadStopWords("../stopwords.txt")
-    infilename = etk.DEF_INFILENAME
-    K = etk.DEF_K
 
-    if len(args)>0:
-        infilename = args[0]
-    if len(args)>1:
-        K = int(args[1])
+    parser = argparse.ArgumentParser(
+        description='''Creates word cloud data for visualization from the tweet file provided.''',
+        epilog="""TweetTracker. Copyright (c) Arizona Board of Regents on behalf of Arizona State University\n@author Shobhit Sharma""",
+        formatter_class=argparse.RawTextHelpFormatter)
+    parser.add_argument('-i', nargs="?", default=etk.DEF_INFILENAME,
+                        help='Name of the input file containing tweets')
+    parser.add_argument('-s', nargs="?", default="../stopwords.txt",
+                        help='Name of file containing stop words')
+    parser.add_argument('-k', nargs="?", default=etk.DEF_K,
+                        help='Name of the input file containing tweets')
 
-    print etk.GetTopKeywords(infilename, K, False,True,tu)
+    argsi = parser.parse_args()
+
+    infile_name = argsi.i
+    stopwords_file = argsi.s
+
+    tu.load_stop_words(stopwords_file)
+
+    K = argsi.k
+
+    print etk.get_top_keywords(infile_name, K, False, True, tu)
 
 
 if __name__ == "__main__":
     main(sys.argv[1:])
-
-
-

@@ -1,8 +1,17 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+"""
+Adds context to word cloud. Creates a Temporal Heatmap data for visualization according to the categories mentioned.
+__author__ = "Shobhit Sharma"
+__copyright__ = "TweetTracker. Copyright (c) Arizona Board of Regents on behalf of Arizona State University"
+"""
+import argparse
 from os import sys, path
 sys.path.append(path.dirname(path.dirname(path.abspath(""))))
 from datetime import datetime
 import json
 from Chapter5.support.DateInfo import DateInfo
+
 
 class EventSummaryExtractor(object):
     def __init__(self):
@@ -13,35 +22,18 @@ class EventSummaryExtractor(object):
         self.daysdm = "%b/%d/%Y"
         self.hoursdm = "%H"
 
-    def InitializeCategories(self):
-        people = []
-        people.append("protesters")
-        people.append("people")
-        self.CATEGORIES["People"]= people
-        police = []
-        police.append("police")
-        police.append("cops")
-        police.append("nypd")
-        police.append("raid")
-        self.CATEGORIES["Police"]= police
-        media = []
-        media.append("press")
-        media.append("news")
-        media.append("media")
-        self.CATEGORIES["Media"] = media
-        city = []
-        city.append("nyc")
-        city.append("zucotti")
-        city.append("park")
-        self.CATEGORIES["Location"]= city
-        judiciary = []
-        judiciary.append("judge")
-        judiciary.append("eviction")
-        judiciary.append("order")
-        judiciary.append("court")
-        self.CATEGORIES["Judiciary"] = judiciary
+    def initialize_categories(self):
+        self.CATEGORIES["People"]= ["protesters", "people"]
+        self.CATEGORIES["Police"]= ["police", "cops", "nypd", "raid"]
+        self.CATEGORIES["Media"] = ["press", "news", "media"]
+        self.CATEGORIES["Location"]= ["nyc", "zucotti", "park"]
+        self.CATEGORIES["Judiciary"] = ["judge", "eviction", "order", "court"]
 
-    def ExtractCategoryTrends(self,filename):
+    def extract_category_trends(self, filename):
+        """
+        :param filename: 
+        :return: 
+        """
         result = {}
         temp = ""
         catkeys = self.CATEGORIES.keys()
@@ -117,18 +109,24 @@ class EventSummaryExtractor(object):
         result["data"]=data
         return result
 
+
 def main(args):
     ese = EventSummaryExtractor()
-    infilename = ese.DEF_INFILENAME
+    parser = argparse.ArgumentParser(
+        description='''Adds context to word cloud. Creates a Temporal Heatmap data for visualization according to the categories mentioned.''',
+        epilog="""TweetTracker. Copyright (c) Arizona Board of Regents on behalf of Arizona State University\n@author Shobhit Sharma""",
+        formatter_class=argparse.RawTextHelpFormatter)
+    parser.add_argument('-i', nargs="?", default=ese.DEF_INFILENAME,
+                        help='Name of the input file containing tweets')
 
-    if len(args)>0:
-        infilename = args[0]
+    argsi = parser.parse_args()
 
-    ese.InitializeCategories()
-    print ese.ExtractCategoryTrends(infilename)
+    infile_name = argsi.i
+    ese.initialize_categories()
+    print ese.extract_category_trends(infile_name)
 
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    main(sys.argv)
 
 

@@ -1,19 +1,32 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+"""
+Creates data for visualizing Trend Comparison.
+__author__ = "Shobhit Sharma"
+__copyright__ = "TweetTracker. Copyright (c) Arizona Board of Regents on behalf of Arizona State University"
+"""
+import argparse
 from os import sys, path
 sys.path.append(path.dirname(path.dirname(path.abspath(""))))
 import json
 import datetime
 from Chapter5.trends.TCDateInfo import TCDateInfo
 
+
 class TrendComparisonExample(object):
     def __init__(self):
         self.DEF_INFILENAME = "../ows.json"
         self.SDM = "%d %b %Y %H:%M"
 
-    def GenerateDataTrend(self,inFilename, keywords):
+    def generate_data_trend(self, in_filename, keywords):
+        """
+        :param in_filename: File containing tweets
+        :param keywords: words for trend comparision.
+        """
         result = []
         datecount = {}
 
-        with open(inFilename) as fp:
+        with open(in_filename) as fp:
             for temp in fp:
                 jobj = json.loads(temp)
                 text = jobj["text"].lower()
@@ -56,20 +69,23 @@ class TrendComparisonExample(object):
 
 def main(args):
     tce = TrendComparisonExample()
-    words = []
-    infilename = tce.DEF_INFILENAME
 
-    if len(args)>0:
-        infilename = args[0]
+    parser = argparse.ArgumentParser(
+        description='''Creates data for visualizing Trend Comparison.''',
+        epilog="""TweetTracker. Copyright (c) Arizona Board of Regents on behalf of Arizona State University\n@author Shobhit Sharma""",
+        formatter_class=argparse.RawTextHelpFormatter)
+    parser.add_argument('-i', nargs="?", default=tce.DEF_INFILENAME,
+                        help='Name of the input file containing tweets')
+    parser.add_argument('-w', nargs="*", default=["#nypd", "#ows"],
+                        help='Words for spark line chart')
 
-    for i in range(1,len(args)):
-        words.append(args[i])
+    argsi = parser.parse_args()
 
-    if not words:
-        words.append("#nypd")
-        words.append("#ows")
+    in_filename = argsi.i
 
-    print tce.GenerateDataTrend(infilename,words)
+    words = argsi.w
+
+    print tce.generate_data_trend(in_filename, words)
 
 if __name__ == "__main__":
     main(sys.argv[1:])
