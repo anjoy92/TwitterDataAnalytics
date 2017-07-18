@@ -1,17 +1,31 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+"""
+Calculate Pagerank Centrality from the file given
+__author__ = "Shobhit Sharma"
+__copyright__ = "TweetTracker. Copyright (c) Arizona Board of Regents on behalf of Arizona State University"
+"""
+import argparse
 from os import sys, path
 sys.path.append(path.dirname(path.dirname(path.abspath(""))))
 from Chapter4.centrality.TweetToGraph import TweetToGraph
 
 def main(args):
     ttg = TweetToGraph()
-    words = []
-    infilename = ttg.DEF_INFILENAME
 
-    if len(args)>0:
-        infilename = args[0]
+    parser = argparse.ArgumentParser(
+        description='''Calculate Pagerank Centrality from the file given.''',
+        epilog="""TweetTracker. Copyright (c) Arizona Board of Regents on behalf of Arizona State University\n@author Shobhit Sharma""",
+        formatter_class=argparse.RawTextHelpFormatter)
+    parser.add_argument('-i', nargs="?", default=ttg.DEF_INFILENAME,
+                        help='Name of the input file containing tweets')
 
-    ttg.createRetweetNetwork(infilename)
-    pagerank_centrality = ttg.pagerankCentrality()
+    argsi = parser.parse_args()
+
+    infile_name = argsi.i
+
+    ttg.create_retweet_network(infile_name)
+    pagerank_centrality = ttg.pagerank_centrality()
     print pagerank_centrality
     print "User\t\tCentrality"
     for obj in pagerank_centrality:

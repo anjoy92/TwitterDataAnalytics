@@ -1,3 +1,11 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+"""
+Calculate InDegree Centrality from the file given
+__author__ = "Shobhit Sharma"
+__copyright__ = "TweetTracker. Copyright (c) Arizona Board of Regents on behalf of Arizona State University"
+"""
+import argparse
 from os import sys, path
 sys.path.append(path.dirname(path.dirname(path.abspath(""))))
 from Chapter4.centrality.TweetToGraph import TweetToGraph
@@ -6,13 +14,20 @@ import matplotlib.pyplot as plt
 
 def main(args):
     ttg = TweetToGraph()
-    infilename = ttg.DEF_INFILENAME
 
-    if len(args)>0:
-        infilename = args[0]
+    parser = argparse.ArgumentParser(
+        description='''Calculate InDegree Centrality from the file given.''',
+        epilog="""TweetTracker. Copyright (c) Arizona Board of Regents on behalf of Arizona State University\n@author Shobhit Sharma""",
+        formatter_class=argparse.RawTextHelpFormatter)
+    parser.add_argument('-i', nargs="?", default=ttg.DEF_INFILENAME,
+                        help='Name of the input file containing tweets')
 
-    ttg.createRetweetNetwork(infilename)
-    in_degree_centrality=ttg.inDegreeCentrality()
+    argsi = parser.parse_args()
+
+    infile_name = argsi.i
+
+    ttg.create_retweet_network(infile_name)
+    in_degree_centrality=ttg.in_degree_centrality()
     print in_degree_centrality
     print "User\t\tCentrality"
     for obj in in_degree_centrality:
