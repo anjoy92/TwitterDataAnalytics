@@ -29,9 +29,20 @@ class LocationTranslationExample(object):
         print "Location", loc
         if not loc:
             return
+
+        # Step 1 : Encode to utf8 and convert to the form of url parameter.
         encoded_loc = urllib.quote(loc.encode('utf8'))
-        url = "http://open.mapquestapi.com/nominatim/v1/search?q=" + encoded_loc + "&format=json" + "&key=0EbGZdPxMd7G80nIqadYzgVD0EfL9RtX";
+
+        # Step 2: Create the url to fetch location from the mapquestapi.
+        # The url has q 'String to search' and key 'auth key'
+        # which you can create by going to
+        # https://developer.mapquest.com/plan_purchase/steps/business_edition/business_edition_free/register.
+        url = "http://open.mapquestapi.com/nominatim/v1/search?q=" + encoded_loc + "&format=json" + "&key=0EbGZdPxMd7G80nIqadYzgVD0EfL9RtX"
+
+        # Step 3: Make the request and get result
         results = self.read_html(url)
+
+        # Step 4: Check if the reply had found any result or not
         if not results:
             return location
         if len(results) > 0:
@@ -45,7 +56,10 @@ class LocationTranslationExample(object):
         :param url: 
         :return: JSON result object
         """
+        # Make Get request to the url
         r = requests.get(url=url)
+
+        # Check for any error
         if r.status_code == 404 or r.status_code == 400:
             print "Error", r.content
             return ""
@@ -53,6 +67,7 @@ class LocationTranslationExample(object):
             print "Authorization Error"
             return ""
 
+        # Return the Result
         return r.json()
 
 
@@ -68,6 +83,9 @@ def main(args):
     parser.add_argument('locationString', nargs="?", default="Brickyard Building Tempe 85281",
                         help='Give the location string/address')
     argsi = parser.parse_args()
+
+    # Make class object and call the translation function
+    # with the search string provided from command line.
     lte = LocationTranslationExample()
     print lte.translate_loc(argsi.locationString)
 

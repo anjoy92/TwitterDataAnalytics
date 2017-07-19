@@ -9,6 +9,8 @@ from requests_oauthlib import OAuth1
 
 class OAuthTokenSecret(object):
     def __init__(self, consumer_key, consumer_secret, user_access_token, user_access_secret):
+
+        # Create oauth object from the keys given
         self.auth = OAuth1(consumer_key,
                            client_secret=consumer_secret,
                            resource_owner_key=user_access_token,
