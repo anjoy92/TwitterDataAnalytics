@@ -12,6 +12,13 @@ sys.path.append(path.dirname(path.dirname(path.abspath(""))))
 import json
 import datetime
 from Chapter5.support.DateInfo import DateInfo
+from flask import json, render_template, send_from_directory, jsonify, request
+from flask import Flask
+app = Flask(__name__ ,static_folder='../static')
+
+@app.route('/')
+def hello_world():
+   return send_from_directory('../templates/','TrendLineExample.html')
 
 
 class ExtractDatasetTrend(object):
@@ -48,7 +55,8 @@ class ExtractDatasetTrend(object):
         return result
 
 
-def main(args):
+@app.route('/getData', methods=['GET', 'POST'])
+def getData():
     edt = ExtractDatasetTrend()
 
     parser = argparse.ArgumentParser(
@@ -62,8 +70,8 @@ def main(args):
 
     in_filename = argsi.i
 
-    print edt.generate_data_trend(in_filename)
+    return jsonify(edt.generate_data_trend(in_filename))
 
 
-if __name__ == "__main__":
-    main(sys.argv[1:])
+if __name__ == '__main__':
+   app.run()

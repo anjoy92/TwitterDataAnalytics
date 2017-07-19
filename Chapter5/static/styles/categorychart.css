@@ -1,0 +1,13 @@
+#vizpanel {
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -webkit-box-shadow: 0 1px 3px #666;
+    background: #0000;
+    margin: 0 auto;
+    width: 1000px;
+    height: 500px;
+}
+
+*{
+	font-size: 14px;
+}

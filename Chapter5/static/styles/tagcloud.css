@@ -1,0 +1,9 @@
+#cloudpane{
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -webkit-box-shadow: 0 1px 3px #666;    
+    margin: 0 auto;
+    width: 600px;
+    height: 600px;
+	text-align: center;
+}

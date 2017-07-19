@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    <title>KDE Example</title>
+    <link rel="stylesheet" href="static/styles/leaflet.css">
+    <!--[if lte IE 8]><link rel="stylesheet" href="static/styles/leaflet.ie.css" /><![endif]-->
+    <link rel="stylesheet" href="static/styles/mapstyle.css">
+    <style>
+    </style>
+
+  </head>
+  <body>
+    <div id="titleArea">
+      Kernel Density Estimation
+    </div>
+    <div id="mapHere">
+    </div>
+  </body>
+
+  <script src="static/lib/jquery/jquery191.js"></script>
+  <script src="static/lib/jquery/jquery-ui-1.10.1.custom.min.js"></script>
+  <script src="static/lib/leaflet/leaflet.js"></script>
+  <script src="static/js/kernelDE.js"></script>
+  <script src="static/js/mapWidget.js"></script>
+
+  <script>
+
+    $(document).ready(function(){
+
+      //resize the map to an appropriate height
+      var docHeight = $(document).height(),
+        $mapSpot = $("#mapHere");
+
+      $mapSpot.height(docHeight);
+      $mapSpot.tsmap();
+    });
+  </script>
+
+</html>

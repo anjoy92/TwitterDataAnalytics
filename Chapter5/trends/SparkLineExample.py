@@ -14,7 +14,13 @@ sys.path.append(path.dirname(path.dirname(path.abspath(""))))
 import json
 import datetime
 from Chapter5.support.DateInfo import DateInfo
+from flask import json, render_template, send_from_directory, jsonify, request
+from flask import Flask
+app = Flask(__name__ ,static_folder='../static')
 
+@app.route('/')
+def hello_world():
+   return send_from_directory('../templates/','SparkLineExample.html')
 
 class SparkLineExample(object):
     def __init__(self):
@@ -70,8 +76,8 @@ class SparkLineExample(object):
 
         return result
 
-
-def main(args):
+@app.route('/getData', methods=['GET', 'POST'])
+def getData():
     sle = SparkLineExample()
 
     parser = argparse.ArgumentParser(
@@ -80,7 +86,7 @@ def main(args):
         formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument('-i', nargs="?", default=sle.DEF_INFILENAME,
                         help='Name of the input file containing tweets')
-    parser.add_argument('-w', nargs="*", default=["#nypd", "#ows"],
+    parser.add_argument('-w', nargs="*", default=["#nypd", "#ows","zuccotti","protest"],
                         help='Words for spark line chart')
 
     argsi = parser.parse_args()
@@ -89,8 +95,8 @@ def main(args):
 
     words = argsi.w
 
-    print sle.generate_data_trend(in_filename, words)
+    return jsonify(sle.generate_data_trend(in_filename, words))
 
 
-if __name__ == "__main__":
-    main(sys.argv[1:])
+if __name__ == '__main__':
+   app.run()

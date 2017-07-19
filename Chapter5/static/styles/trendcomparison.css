@@ -1,0 +1,24 @@
+svg {
+  font: 14px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.ylabel {
+	font-size: 14px;
+}
+
+.legend{
+	font-size: 14px;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}

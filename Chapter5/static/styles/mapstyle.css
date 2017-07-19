@@ -1,0 +1,18 @@
+div.map-legend{
+  position:relative;
+  top:5%;
+  left:85%;
+  width:3%;
+  height:45%;
+  background-color: #FAF0E6;
+  border: 1px solid black;
+  border-radius: 15px;
+  
+  text-align: center;
+  font-size:smaller;
+  vertical-align: middle;
+}
+
+div.map-legend-item{
+  width:100%;
+}

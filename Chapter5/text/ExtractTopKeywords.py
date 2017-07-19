@@ -82,7 +82,7 @@ def main(args):
 
     K = argsi.k
 
-    print etk.get_top_keywords(infile_name, K, False, True, tu)
+    print json.dumps(etk.get_top_keywords(infile_name, K, False, True, tu))
 
 
 if __name__ == "__main__":

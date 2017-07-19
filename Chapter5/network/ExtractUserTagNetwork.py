@@ -76,7 +76,7 @@ def main(args):
     in_filename = argsi.i
 
     user_tag_map = eutn.extract_user_hashtag_network(in_filename)
-
+    print json.dumps(user_tag_map)
     keys = set(user_tag_map.keys())
     print len(keys)
     for key in keys:

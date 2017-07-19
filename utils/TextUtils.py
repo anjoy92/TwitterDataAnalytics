@@ -41,39 +41,33 @@ class TextUtils(object):
                     words[token] = 1
         return words
 
-    @staticmethod
     def is_tweet_rt(self, text):
         if re.search("^rt @[a-z_0-9]+", text):
             return True
         else:
             return False
 
-    @staticmethod
     def contains_url(self, text):
         if re.search("https?://[a-zA-Z0-9\\./]+", text):
             return True
         else:
             return False
 
-    @staticmethod
     def get_hash_tags(self, text):
         return re.findall("#[a-zA-Z0-9]+", text)
 
-    @staticmethod
     def get_clean_text(self, text):
         text = re.sub("'|\"|&quot;", "", text)
         text = re.sub("\\\\", "", text)
         text = re.sub("\r\n|\n|\r", "", text)
         return text.strip()
 
-    @staticmethod
     def remove_rt_elements(self, tweet):
         text = re.sub("rt @[a-z_A-Z0-9]+", " ", tweet)
         text = re.sub("RT @[a-z_A-Z0-9]+", " ", text)
         text = re.sub(":", "", text)
         return text.strip()
 
-    @staticmethod
     def remove_twitter_elements(tweet):
 
         temp_tweet = re.sub("#[a-zA-Z_0-9]+", "", tweet)

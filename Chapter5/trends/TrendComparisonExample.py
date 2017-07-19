@@ -11,6 +11,13 @@ sys.path.append(path.dirname(path.dirname(path.abspath(""))))
 import json
 import datetime
 from Chapter5.trends.TCDateInfo import TCDateInfo
+from flask import json, render_template, send_from_directory, jsonify, request
+from flask import Flask
+app = Flask(__name__ ,static_folder='../static')
+
+@app.route('/')
+def hello_world():
+   return send_from_directory('../templates/','TrendComparisonExample.html')
 
 
 class TrendComparisonExample(object):
@@ -67,7 +74,8 @@ class TrendComparisonExample(object):
         return result
 
 
-def main(args):
+@app.route('/getData', methods=['GET', 'POST'])
+def getData():
     tce = TrendComparisonExample()
 
     parser = argparse.ArgumentParser(
@@ -85,7 +93,7 @@ def main(args):
 
     words = argsi.w
 
-    print tce.generate_data_trend(in_filename, words)
+    return jsonify(tce.generate_data_trend(in_filename, words))
 
-if __name__ == "__main__":
-    main(sys.argv[1:])
+if __name__ == '__main__':
+    app.run()

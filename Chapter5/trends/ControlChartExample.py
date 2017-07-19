@@ -14,6 +14,13 @@ sys.path.append(path.dirname(path.dirname(path.abspath(""))))
 import json
 import datetime
 from Chapter5.support.DateInfo import DateInfo
+from flask import json, render_template, send_from_directory, jsonify, request
+from flask import Flask
+app = Flask(__name__ ,static_folder='../static')
+
+@app.route('/')
+def hello_world():
+   return send_from_directory('../templates/','ControlChartExample.html')
 
 
 class ControlChartExample(object):
@@ -54,15 +61,13 @@ class ControlChartExample(object):
             result.append(jobj)
         return result
 
-    @staticmethod
-    def get_standard_dev(dateinfos, mean):
+    def get_standard_dev(self,dateinfos, mean):
         intsum = 0
         numperiods = len(dateinfos)
         for dinfo in dateinfos:
             intsum += math.pow((dinfo.count - mean), 2)
         return math.sqrt(float(intsum) / numperiods)
 
-    @staticmethod
     def get_mean(self, date_infos):
         num_periods = len(date_infos)
         sum = 0
@@ -70,8 +75,8 @@ class ControlChartExample(object):
             sum += dinfo.count
         return float(sum) / num_periods
 
-
-def main(args):
+@app.route('/getData', methods=['GET', 'POST'])
+def getData():
     cce = ControlChartExample()
 
     parser = argparse.ArgumentParser(
@@ -85,8 +90,8 @@ def main(args):
 
     in_filename = argsi.i
 
-    print cce.generate_data_trend(in_filename)
+    return jsonify(cce.generate_data_trend(in_filename))
 
 
-if __name__ == "__main__":
-    main(sys.argv[1:])
+if __name__ == '__main__':
+   app.run()

@@ -11,6 +11,14 @@ sys.path.append(path.dirname(path.dirname(path.abspath(""))))
 from datetime import datetime
 import json
 from Chapter5.support.DateInfo import DateInfo
+from flask import json, render_template, send_from_directory, jsonify, request
+from flask import Flask
+app = Flask(__name__ ,static_folder='../static')
+
+@app.route('/')
+def hello_world():
+   return send_from_directory('../templates/','TopicChartExample.html')
+
 
 
 class EventSummaryExtractor(object):
@@ -110,7 +118,8 @@ class EventSummaryExtractor(object):
         return result
 
 
-def main(args):
+@app.route('/getData', methods=['GET', 'POST'])
+def getData():
     ese = EventSummaryExtractor()
     parser = argparse.ArgumentParser(
         description='''Adds context to word cloud. Creates a Temporal Heatmap data for visualization according to the categories mentioned.''',
@@ -123,10 +132,12 @@ def main(args):
 
     infile_name = argsi.i
     ese.initialize_categories()
-    print ese.extract_category_trends(infile_name)
+
+    return jsonify(ese.extract_category_trends(infile_name))
 
 
-if __name__ == "__main__":
-    main(sys.argv)
+if __name__ == '__main__':
+   app.run()
+
 
 
