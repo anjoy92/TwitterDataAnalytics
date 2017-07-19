@@ -14,7 +14,6 @@ from Chapter5.support.DateInfo import DateInfo
 from flask import json, render_template, send_from_directory, jsonify, request
 from flask import Flask
 app = Flask(__name__ ,static_folder='../static')
-
 @app.route('/')
 def hello_world():
    return send_from_directory('../templates/','TopicChartExample.html')
@@ -120,6 +119,16 @@ class EventSummaryExtractor(object):
 
 @app.route('/getData', methods=['GET', 'POST'])
 def getData():
+    global infile_name
+    ese = EventSummaryExtractor()
+
+    ese.initialize_categories()
+
+    return jsonify(ese.extract_category_trends(infile_name))
+
+
+if __name__ == '__main__':
+    global infile_name
     ese = EventSummaryExtractor()
     parser = argparse.ArgumentParser(
         description='''Adds context to word cloud. Creates a Temporal Heatmap data for visualization according to the categories mentioned.''',
@@ -131,13 +140,8 @@ def getData():
     argsi = parser.parse_args()
 
     infile_name = argsi.i
-    ese.initialize_categories()
 
-    return jsonify(ese.extract_category_trends(infile_name))
-
-
-if __name__ == '__main__':
-   app.run()
+    app.run(port=5003)
 
 
 

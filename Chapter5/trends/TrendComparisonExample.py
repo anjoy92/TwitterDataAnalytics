@@ -96,4 +96,4 @@ def getData():
     return jsonify(tce.generate_data_trend(in_filename, words))
 
 if __name__ == '__main__':
-    app.run()
+    app.run(port=5008)

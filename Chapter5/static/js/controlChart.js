@@ -1,5 +1,4 @@
 var trendcomp = {
-	script_location: 'jsp/ControlChart.jsp',
 	margin: {top: 20, right: 80, bottom: 30, left: 50},
     width:null,
     height:null,
@@ -116,7 +115,7 @@ GenerateGraph:function(data)
 };
 window.onload = function() {
 	trendcomp.Initialize();
-	$.ajax(trendcomp.script_location,
+	$.ajax('/getData',
 	{
 		data: {filename:'ows.json'},
 		dataType: 'json',

@@ -77,21 +77,23 @@ class ControlChartExample(object):
 
 @app.route('/getData', methods=['GET', 'POST'])
 def getData():
+    global in_filename
     cce = ControlChartExample()
-
-    parser = argparse.ArgumentParser(
-        description='''Creates Control Chart Trend data for visualization from the tweet file provided. A control chart is a statistical tool used to detect abnormal variations in a process. This task is performed by measuring the stability of the process through the use of control limits''',
-        epilog="""TweetTracker. Copyright (c) Arizona Board of Regents on behalf of Arizona State University\n@author Shobhit Sharma""",
-        formatter_class=argparse.RawTextHelpFormatter)
-    parser.add_argument('-i', nargs="?", default=cce.DEF_INFILENAME,
-                        help='Name of the input file containing tweets')
-
-    argsi = parser.parse_args()
-
-    in_filename = argsi.i
 
     return jsonify(cce.generate_data_trend(in_filename))
 
 
 if __name__ == '__main__':
-   app.run()
+    global in_filename
+
+    parser = argparse.ArgumentParser(
+        description='''Creates Control Chart Trend data for visualization from the tweet file provided. A control chart is a statistical tool used to detect abnormal variations in a process. This task is performed by measuring the stability of the process through the use of control limits''',
+        epilog="""TweetTracker. Copyright (c) Arizona Board of Regents on behalf of Arizona State University\n@author Shobhit Sharma""",
+        formatter_class=argparse.RawTextHelpFormatter)
+    parser.add_argument('-i', nargs="?", default=ControlChartExample().DEF_INFILENAME,
+                        help='Name of the input file containing tweets')
+
+    argsi = parser.parse_args()
+
+    in_filename = argsi.i
+    app.run(port=5005)
