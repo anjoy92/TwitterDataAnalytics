@@ -34,10 +34,19 @@ def main(args):
                         help='Number of Worker Threads')
     argsi = parser.parse_args()
 
+    # Get Number of Iterations on LDA from the command line argument
     iterations = argsi.c
+
+    # Get Number of Topics from the command line argument
     num_topics = argsi.n
+
+    # Get Number of Words to analyze from the command line argument
     num_words_to_analyze = argsi.w
+
+    # Get number of workers from the command line argument
     num_workers = argsi.t
+
+    # Get input file name from the command line argument
     infile_name = argsi.i
 
     tokenizer = RegexpTokenizer(r'\w+')
@@ -82,9 +91,8 @@ def main(args):
     # convert tokenized documents into a document-term matrix
     corpus = [dictionary.doc2bow(text) for text in texts]
     print "started"
-    # generate LDA model
-    # ldamodel = gensim.models.ldamodel.LdaModel(corpus, num_topics=num_topics, id2word=dictionary, passes=ITERATIONS)
 
+    # generate LDA model
     ldamodel = models.LdaMulticore(corpus, id2word=dictionary, num_topics=num_topics, workers=num_workers,
                                    passes=iterations)
     for terms in ldamodel.print_topics(num_topics=num_topics, num_words=num_words_to_analyze):

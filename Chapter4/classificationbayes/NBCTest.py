@@ -22,17 +22,24 @@ def main(args):
 
     argsi = parser.parse_args()
 
+    # Get the input file name from the command line argument
     infile_name = argsi.i
 
+    # Train the model
     nbc.train_from_file(infile_name)
 
+    # Test the classification model
     print "Classify: I love new york"
     print str(nbc.classify("I love new york"))
     print "Classify: I like violence"
     print str(nbc.classify("I like violence"))
 
+    print "*******************************************\n"
+    # Print top words in Sad Sentiment
     print nbc.print_word_occurs(0, 50)
-    print "**********************"
+
+    print "*******************************************\n"
+    # Print top words in Happy Sentiment
     print nbc.print_word_occurs(1, 50)
 
 if __name__ == "__main__":

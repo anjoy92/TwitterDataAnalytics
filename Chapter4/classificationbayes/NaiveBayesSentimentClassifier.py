@@ -98,37 +98,44 @@ class NaiveBayesSentimentClassifier(object):
                 self.sentOccurs[token] = newArray
         self.sentCount[sentIndex] += 1
 
-    def calculate_label_prob(self, tokens, sentIndex):
+    def calculate_label_prob(self, tokens, sent_index):
         """
         The probability of the tweet having a given label.
         :param tokens: The tokens in the tweet.
-        :param sentIndex: The probability we are testing.
+        :param sent_index: The probability we are testing.
         :return: The probability the tweet has the class label indicated by "sentIndex".
         """
         pClass = [0] * len(self.SENTIMENT_LABELS)
+
+        # Get total times the sentiment was observed
         cSum = self.sum_vector(self.sentCount)
-        totalWordCount = 0
+
+        # Number of words in each sentiment and then normalize. So we get P(s)
         for i in range(len(self.sentCount)):
             pClass[i] = self.sentCount[i] * 1.0 / cSum
-        for word in set(self.sentOccurs.keys()):
-            wordCt = self.sentOccurs[word]
-            totalWordCount = self.sum_vector(wordCt)
-            p = 1.0
-            foundOne = False
-            for token in tokens:
-                if (token in self.sentOccurs):
-                    foundOne = True
-                    probs = self.sentOccurs[token]
-                    pWordGivenClass = probs[sentIndex] / (self.sum_vector(probs))
-                    pWord = self.sum_vector(probs) / totalWordCount
-                    p *= pWordGivenClass * pClass[sentIndex] / pWord
-            if foundOne:
-                return p
-            else:
-                return 0.0
 
-    @staticmethod
-    def sum_vector(vector):
+        p = 1.0
+        found_one = False
+        for token in tokens:
+            if token in self.sentOccurs:
+                found_one = True
+                probs = self.sentOccurs[token]
+                # Calculate P(d/s) where d is word and s is sentiment
+                p_word_given_class = probs[sent_index] / (self.sum_vector(probs))
+                # Calculate (P(d/s)*P(s))/P(d) for each and keep on multiplying.
+                # We are ignoring P(d).
+                p = p *(p_word_given_class * pClass[sent_index])
+        if found_one:
+            return p
+        else:
+            return 0.0
+
+    def sum_vector(self,vector):
+        """
+        Sum the elements in the array
+        :param vector: 
+        :return: sum of the array elements
+        """
         sum = 0.0
         for d in vector:
             sum = sum + d
@@ -144,19 +151,23 @@ class NaiveBayesSentimentClassifier(object):
         tokens = self.get_tokens(tweetText)
         max_label_idx = 0
         for i in range(len(label_probs)):
+            # Calculate the probability that the tweet has that sentiment
             label_probs[i] = self.calculate_label_prob(tokens, i)
             print i, " -> ", label_probs[i]
+
+            # Keep track of the label probability
             if label_probs[i] > label_probs[max_label_idx]:
                 max_label_idx = i
             else:
                 max_label_idx = max_label_idx
 
+        # Calculate the confidence
         conf = label_probs[max_label_idx]
         label_probs[max_label_idx] = 0
-
         conf -= self.sum_vector(label_probs)
 
-        return classification().classification(self.SENTIMENT_LABELS[max_label_idx], conf)
+        # Create a classification Object and return
+        return Classification().classification(self.SENTIMENT_LABELS[max_label_idx], conf)
 
     def print_word_occurs(self, sentIndex, topN):
         """
@@ -167,13 +178,20 @@ class NaiveBayesSentimentClassifier(object):
         """
         sb = ""
         wpcset = []
-        print "Top ", topN, " from ", self.SENTIMENT_LABELS[sentIndex]
+        print "Top ", topN, " from ", self.SENTIMENT_LABELS[sentIndex],":\n"
+
+        # Get the sentiment keys
         s_iter = set(self.sentOccurs.keys())
+
         for s in s_iter:
+            # Get the word and create a word count pair and append in wpset object
             wpcset.append(WordCountPair().WordCountPair(s, math.sqrt(self.sentOccurs[s][sentIndex] * 1.0)))
+
+        # Sort by the count value. See the comparator in WordCountPair class for more info
         wpcset.sort()
         i = 0
 
+        # Traverse the top words in the sentIndex sentiment
         while (i < topN or topN <= 0) and i < len(wpcset):
             if wpcset:
                 s = wpcset[i].word
@@ -187,6 +205,11 @@ class NaiveBayesSentimentClassifier(object):
         return sb
 
     def train_instances(self, tweet_texts):
+        """
+        Call the train function to train each word in the tweet text
+        :param tweet_texts: 
+        :return: 
+        """
         for text in tweet_texts:
             self.train_instance(text)
 

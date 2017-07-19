@@ -26,12 +26,21 @@ def main(args):
 
     argsi = parser.parse_args()
 
+    # Get the input file name containing tweets from the command line argument
     infile_name = argsi.i
 
+    # Create the tweet network using Networkx library from the tweet file mentioned
     ttg.create_retweet_network(infile_name)
+
+    # Print the Network generated.
     print ttg.graph
     G = ttg.graph
+
     nodes = {}
+
+    # Traverse the full network and create a nodes dictionary having key as the node name
+    # and value as the number of times it has occurred in the network.
+    # We are doing this to assign the size of the node according to its weight/occurrence
     for (u, v, d) in G.edges(data=True):
         print u, v, d
         if u in nodes.keys():
@@ -54,11 +63,20 @@ def main(args):
                 nodes[v] = d['weight']
             else:
                 nodes[v] = 1
+
+    # Copy the nodes values/weights to the weights list
     weights = [int(nodes[i]) for i in nodes]
-    # d = nx.degree(G)
+
+    # This creates the visualization network using spring layout and returns the position(x,y) of each node
     pos = nx.spring_layout(G)
+
+    # Normalize the weights to create a good visualization. Also increase the value of 1000 to get bigger sized nodes.
     normalized = [float(i) * 1000 / sum(weights) for i in weights]
+
+    # Draw the network using the matplotlib library. Networkx uses it internally.
     nx.draw_networkx(G, pos, nodelist=nodes.keys(), node_size=normalized)
+
+    # Show the plotted network graph
     plt.show()
 
 

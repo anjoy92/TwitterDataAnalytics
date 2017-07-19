@@ -24,10 +24,15 @@ def main(args):
 
     argsi = parser.parse_args()
 
+    # Get the input file name containing tweets from the command line argument
     infile_name = argsi.i
 
+    # Create the tweet network using Networkx library from the tweet file mentioned
     ttg.create_retweet_network(infile_name)
+
+    # Calculate the indegree centrality from the tweet network
     in_degree_centrality=ttg.in_degree_centrality()
+
     print in_degree_centrality
     print "User\t\tCentrality"
     for obj in in_degree_centrality:

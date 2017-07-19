@@ -23,9 +23,13 @@ def main(args):
 
     argsi = parser.parse_args()
 
+    # Get the input file name containing tweets from the command line argument
     infile_name = argsi.i
 
+    # Create the tweet network using Networkx library from the tweet file mentioned
     ttg.create_retweet_network(infile_name)
+
+    # Calculate the eigenvector centrality from the tweet network
     eigenvector_centrality = ttg.eigen_vector_centrality()
 
     print eigenvector_centrality
