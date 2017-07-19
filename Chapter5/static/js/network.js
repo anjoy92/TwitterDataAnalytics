@@ -413,16 +413,8 @@ $('#graph').html('');
 //call this on load
 $(document).ready(function()
 {   
-   var filter = {"Group1": {"color":"#FF0000","hts":["#zuccotti"]}, "Group2": {"color":"#3DF500","hts":["#nypd"]}};
-   var numnodes = 5;
-   console.log("shobhit");
-   console.log(network_page.script_location);
-   console.log(network_page.jsondata);
    $.ajax('/getData',
 	{
-		 type:"GET",
-		//data: {filename:'ows.json',groups:{'Group 2': {'color': '#0FFF00', 'hts': ['#nypd']}, 'Group 1': {'color': '#800000', 'hts': ['zuccotti']}}},
-		data:{filname:'hi'},
 		dataType: 'json',
 		success: function (data, statusText, jqXHR)
 		{

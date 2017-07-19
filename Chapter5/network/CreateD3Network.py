@@ -5,6 +5,7 @@ Create D3 network data from the file give.
 __author__ = "Shobhit Sharma"
 __copyright__ = "TweetTracker. Copyright (c) Arizona Board of Regents on behalf of Arizona State University"
 """
+import argparse
 import math
 from os import sys, path
 
@@ -26,7 +27,7 @@ def hello_world():
 
 class CreateD3Network(object):
     def __init__(self):
-        self.DEF_INFILENAME = "ows.json"
+        self.DEF_INFILENAME = "../ows.json"
         self.RTPATTERN = "rt @[_a-zA-Z0-9]+"
         self.DEFAULT_NODE_SIZE = 0
 
@@ -353,24 +354,31 @@ def get_next_hop_connections(userconnections, cur_node, newnodes):
 
 @app.route('/getData', methods=['GET', 'POST'])
 def getData():
+    global groups
+    global infile_name
     cdn = CreateD3Network()
-    obj = {}
-    jobj = {}
-    obj["color"] = "#800000"
-    ja = ["zuccotti"]
-    obj["hts"] = ja
-    jobj["Group 1"] = obj
-    obj2 = {}
-    obj2["color"] = "#0FFF00"
-    ja2 = ["#nypd"]
-    obj2["hts"] = ja2
-    jobj["Group 2"] = obj2
 
-    filename = "../ows.json"
-
-    nodes = cdn.convert_tweets_to_diffusion_path(filename, 7, jobj, 5)
+    nodes = cdn.convert_tweets_to_diffusion_path(infile_name, 7, groups, 5)
     return jsonify(nodes)
 
 
 if __name__ == '__main__':
-   app.run(port=5002)
+    global jobj
+    global infile_name
+
+    parser = argparse.ArgumentParser(
+        description='''Adds context to word cloud. Creates a Temporal Heatmap data for visualization according to the categories mentioned.''',
+        epilog="""TweetTracker. Copyright (c) Arizona Board of Regents on behalf of Arizona State University\n@author Shobhit Sharma""",
+        formatter_class=argparse.RawTextHelpFormatter)
+    parser.add_argument('-i', nargs="?", default=CreateD3Network().DEF_INFILENAME,
+                        help='Name of the input file containing tweets')
+
+    parser.add_argument('-g', nargs="?", default='{"Group 1": {"color": "#800000", "hts": ["zuccotti"]}, "Group 2": {"color": "#0FFF00", "hts": ["#nypd"]}}',
+                        help="JSON of Groups. Each group has color and hts(keywords array):\nFor Example:\n{'Group 2': {'color': '#0FFF00', 'hts': ['#nypd']}, 'Group 1': {'color': '#800000', 'hts': ['zuccotti']}}")
+
+    argsi = parser.parse_args()
+
+    infile_name = argsi.i
+
+    groups = json.loads(argsi.g)
+    app.run(port=5002)

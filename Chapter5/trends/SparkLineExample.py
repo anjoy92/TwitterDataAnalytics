@@ -78,20 +78,8 @@ class SparkLineExample(object):
 
 @app.route('/getData', methods=['GET', 'POST'])
 def getData():
+    global in_filename
     sle = SparkLineExample()
-
-    parser = argparse.ArgumentParser(
-        description='''Creates Spark Line data for visualization from the tweet file provided.''',
-        epilog="""TweetTracker. Copyright (c) Arizona Board of Regents on behalf of Arizona State University\n@author Shobhit Sharma""",
-        formatter_class=argparse.RawTextHelpFormatter)
-    parser.add_argument('-i', nargs="?", default=sle.DEF_INFILENAME,
-                        help='Name of the input file containing tweets')
-    parser.add_argument('-w', nargs="*", default=["#nypd", "#ows","zuccotti","protest"],
-                        help='Words for spark line chart')
-
-    argsi = parser.parse_args()
-
-    in_filename = argsi.i
 
     words = argsi.w
 
@@ -99,4 +87,16 @@ def getData():
 
 
 if __name__ == '__main__':
-   app.run(port=5007)
+    parser = argparse.ArgumentParser(
+        description='''Creates Spark Line data for visualization from the tweet file provided.''',
+        epilog="""TweetTracker. Copyright (c) Arizona Board of Regents on behalf of Arizona State University\n@author Shobhit Sharma""",
+        formatter_class=argparse.RawTextHelpFormatter)
+    parser.add_argument('-i', nargs="?", default=SparkLineExample().DEF_INFILENAME,
+                        help='Name of the input file containing tweets')
+    parser.add_argument('-w', nargs="*", default=["#nypd", "#ows", "zuccotti", "protest"],
+                        help='Words for spark line chart')
+
+    argsi = parser.parse_args()
+
+    in_filename = argsi.i
+    app.run(port=5007)

@@ -76,13 +76,18 @@ class TrendComparisonExample(object):
 
 @app.route('/getData', methods=['GET', 'POST'])
 def getData():
+    global words
+    global in_filename
     tce = TrendComparisonExample()
 
+    return jsonify(tce.generate_data_trend(in_filename, words))
+
+if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='''Creates data for visualizing Trend Comparison.''',
         epilog="""TweetTracker. Copyright (c) Arizona Board of Regents on behalf of Arizona State University\n@author Shobhit Sharma""",
         formatter_class=argparse.RawTextHelpFormatter)
-    parser.add_argument('-i', nargs="?", default=tce.DEF_INFILENAME,
+    parser.add_argument('-i', nargs="?", default=TrendComparisonExample().DEF_INFILENAME,
                         help='Name of the input file containing tweets')
     parser.add_argument('-w', nargs="*", default=["#nypd", "#ows"],
                         help='Words for spark line chart')
@@ -92,8 +97,4 @@ def getData():
     in_filename = argsi.i
 
     words = argsi.w
-
-    return jsonify(tce.generate_data_trend(in_filename, words))
-
-if __name__ == '__main__':
     app.run(port=5008)

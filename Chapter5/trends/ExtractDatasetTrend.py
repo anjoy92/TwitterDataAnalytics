@@ -57,21 +57,24 @@ class ExtractDatasetTrend(object):
 
 @app.route('/getData', methods=['GET', 'POST'])
 def getData():
+    global in_filename
     edt = ExtractDatasetTrend()
+
+    return jsonify(edt.generate_data_trend(in_filename))
+
+
+if __name__ == '__main__':
+    global in_filename
 
     parser = argparse.ArgumentParser(
         description='''Creates Simple Trend Line data for visualization from the tweet file provided.''',
         epilog="""TweetTracker. Copyright (c) Arizona Board of Regents on behalf of Arizona State University\n@author Shobhit Sharma""",
         formatter_class=argparse.RawTextHelpFormatter)
-    parser.add_argument('-i', nargs="?", default=edt.DEF_INFILENAME,
+    parser.add_argument('-i', nargs="?", default=ExtractDatasetTrend().DEF_INFILENAME,
                         help='Name of the input file containing tweets')
 
     argsi = parser.parse_args()
 
     in_filename = argsi.i
 
-    return jsonify(edt.generate_data_trend(in_filename))
-
-
-if __name__ == '__main__':
-   app.run(port=5006)
+    app.run(port=5006)

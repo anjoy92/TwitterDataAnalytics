@@ -117,7 +117,6 @@ window.onload = function() {
 	trendcomp.Initialize();
 	$.ajax('/getData',
 	{
-		data: {filename:'ows.json'},
 		dataType: 'json',
 		success: function (data, statusText, jqXHR)
 		{
