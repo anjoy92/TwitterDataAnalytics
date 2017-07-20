@@ -164,7 +164,7 @@ if __name__ == '__main__':
     # Get the file name containing the tweets from the command line argument
     infile_name = argsi.i
 
-    # Start the flask app on port 5001
+    # Start the flask app on port 5003
     app.run(port=5003)
 
 
