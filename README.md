@@ -23,11 +23,11 @@ pip install -r /path/to/requirements.txt
 Note: Run with sudo or admin priviledges if the command fails.
 Note: If facing problem while install gensim in windows. Try installing using wheel file. [Link to whl](http://www.lfd.uci.edu/~gohlke/pythonlibs/#gensim)
 
-## Book Chapter Mapping
+## Chapter Listing in Twitter Data Analytics
 The files mentioned in this Tree Mapping directory structure are the runnable python files of the project. The Chapter Mapping refers to the chapter where the book is explaining the concept being implemented in the python file.
 ```
 .
-├── Chapter2                                                Chapter Mapping
+├── Chapter2                                                Chapter Listing
 │   ├── Location
 │   │   └── LocationTranslationExample.py ──────────────    2.6
 │   ├── openauthentication
