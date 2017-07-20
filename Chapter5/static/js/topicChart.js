@@ -1,6 +1,5 @@
 var cat_chart = {
 
-	script_location: 'jsp/TopicChart.jsp',
 	CreateTopicChart:function(json)
 	{
 		var r = Raphael("vizpanel");                    

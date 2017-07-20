@@ -1,6 +1,5 @@
 var tag_cloud = {
 
-	script_location: 'jsp/WordCloud.jsp',
 	layout:null,
 	
 	DrawCloud:function(words)

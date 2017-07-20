@@ -16,7 +16,13 @@ from flask import Flask
 app = Flask(__name__ ,static_folder='../static')
 @app.route('/')
 def hello_world():
-   return send_from_directory('../templates/','TopicChartExample.html')
+    """
+    Returns the  TopicChartExample HTML file as First page.
+    The JS file being used for this page is: topicChart.js
+    The CSS file being used for this page is: topicChart.css
+    :return: The page to be rendered
+    """
+    return send_from_directory('../templates/','TopicChartExample.html')
 
 
 
@@ -45,6 +51,8 @@ class EventSummaryExtractor(object):
         temp = ""
         catkeys = self.CATEGORIES.keys()
         datecount = {}
+
+        # Open file and get time stamps from the tweets
         with open(filename) as fp:
             for temp in fp:
                 d = ""
@@ -59,8 +67,12 @@ class EventSummaryExtractor(object):
                 elif "timestamp" in jobj:
                     time = jobj["timestamp"]
                     d = datetime.fromtimestamp(time/1000)
+
+                # Convert date to the format needed by D3js
                 datestr = d.strftime(self.dayhoursdm)
                 text = jobj["text"].lower()
+
+                # Assign it to the category the tweets belong to
                 for key in catkeys:
                     words = self.CATEGORIES.keys()
                     for word in words:
@@ -76,6 +88,8 @@ class EventSummaryExtractor(object):
                             break
         datekeys = set(datecount.keys())
         dinfos = []
+
+        # For each datekeys generate a DateInfo class object and append
         for date in datekeys:
             d = datetime.strptime(date, self.dayhoursdm)
             if d:
@@ -83,7 +97,11 @@ class EventSummaryExtractor(object):
                 info.d = d
                 info.catcounts = datecount[date]
                 dinfos.append(info)
+
+        # Sort in descending order of the dates
         dinfos.sort(reverse=True)
+
+        # Assign asixsteps according to number of categories and dates
         result["axisxstep"] = len(dinfos) - 1
         result["axisystep"] = len(self.CATEGORIES) - 1
         xcoordinates = []
@@ -118,7 +136,11 @@ class EventSummaryExtractor(object):
 
 
 @app.route('/getData', methods=['GET', 'POST'])
-def getData():
+def get_data():
+    """
+    Function to generate Event summary from the Categories given
+    :return: 
+    """
     global infile_name
     ese = EventSummaryExtractor()
 
@@ -139,8 +161,10 @@ if __name__ == '__main__':
 
     argsi = parser.parse_args()
 
+    # Get the file name containing the tweets from the command line argument
     infile_name = argsi.i
 
+    # Start the flask app on port 5001
     app.run(port=5003)
 
 

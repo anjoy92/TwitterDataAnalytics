@@ -16,11 +16,20 @@ import datetime
 from Chapter5.support.DateInfo import DateInfo
 from flask import json, render_template, send_from_directory, jsonify, request
 from flask import Flask
-app = Flask(__name__ ,static_folder='../static')
+
+app = Flask(__name__, static_folder='../static')
+
 
 @app.route('/')
 def hello_world():
-   return send_from_directory('../templates/','SparkLineExample.html')
+    """
+    Returns the  SparkLineExample HTML file as First page.
+    The JS file being used for this page is: sparkLine.js
+    The CSS file being used for this page is: sparkLine.css
+    :return: The page to be rendered
+    """
+    return send_from_directory('../templates/', 'SparkLineExample.html')
+
 
 class SparkLineExample(object):
     def __init__(self):
@@ -28,8 +37,16 @@ class SparkLineExample(object):
         self.SDM = "%d %b %Y %H"
 
     def generate_data_trend(self, in_filename, keywords):
+        """
+        Generate the data as needed by the D3js chart library
+        :param in_filename: 
+        :param keywords: 
+        :return: 
+        """
         result = {}
         datecount = {}
+
+        # Open the tweet file and get the date and word count on each date format
         with open(in_filename) as fp:
             for temp in fp:
                 jobj = json.loads(temp)
@@ -49,7 +66,8 @@ class SparkLineExample(object):
                         datecount[strdate] = wordcount
         dinfos = []
         keys = set(datecount.keys())
-        print len(keys)
+
+        # Iterate on keys and generate DateInfo class objects
         for key in keys:
             dinfo = TCDateInfo()
             dinfo.d = datetime.datetime.strptime(key, self.SDM)
@@ -59,6 +77,7 @@ class SparkLineExample(object):
         tseriesvals = []
         for i in keywords:
             tseriesvals.append([])
+
         for date in dinfos:
             wordcount = date.wordcount
             counter = 0
@@ -70,14 +89,20 @@ class SparkLineExample(object):
                 counter += 1
         counter = 0
 
+        # Create a json object as required by D3js Library
         for word in keywords:
             result[word] = tseriesvals[counter]
             counter += 1
 
         return result
 
+
 @app.route('/getData', methods=['GET', 'POST'])
-def getData():
+def get_data():
+    """
+    Api Call to return the D3js object needed for visualization
+    :return: 
+    """
     global in_filename
     sle = SparkLineExample()
 
@@ -98,5 +123,8 @@ if __name__ == '__main__':
 
     argsi = parser.parse_args()
 
+    # Get the file name containing the tweets from the command line argument
     in_filename = argsi.i
+
+    # Run the flask app on port 5007
     app.run(port=5007)

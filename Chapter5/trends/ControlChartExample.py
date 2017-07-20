@@ -20,7 +20,13 @@ app = Flask(__name__ ,static_folder='../static')
 
 @app.route('/')
 def hello_world():
-   return send_from_directory('../templates/','ControlChartExample.html')
+    """
+    Returns the  ControlChartExample HTML file as First page.
+    The JS file being used for this page is: controlChart.js
+    The CSS file being used for this page is: controlChart.css
+    :return: The page to be rendered
+    """
+    return send_from_directory('../templates/','ControlChartExample.html')
 
 
 class ControlChartExample(object):
@@ -29,13 +35,21 @@ class ControlChartExample(object):
         self.SDM = "%d %b %Y %H:%M"
 
     def generate_data_trend(self, in_filename):
+        """
+        Generate the data as needed by the D3js chart library
+        :param in_filename: 
+        :return: 
+        """
         datecount = {}
         result = []
+
+        # Open the tweet file and get the date count on each format
         with open(in_filename) as fp:
             for temp in fp:
                 jobj = json.loads(temp)
                 timestamp = jobj["timestamp"]
                 d = datetime.datetime.fromtimestamp(timestamp / 1000)
+                # Convert it to the format needed by the D3js library
                 strdate = d.strftime(self.SDM)
                 if strdate in datecount:
                     datecount[strdate] += 1
@@ -43,14 +57,22 @@ class ControlChartExample(object):
                     datecount[strdate] = 1
         dinfos = []
         keys = set(datecount.keys())
+
+        # Iterate on keys and generate a DateInfo class object
         for key in keys:
             dinfo = DateInfo()
             dinfo.d = datetime.datetime.strptime(key, self.SDM)
             dinfo.count = datecount[key]
             dinfos.append(dinfo)
+
+        # Get the mean
         mean = self.get_mean(dinfos)
+
+        # Get the standard deviation
         stddev = self.get_standard_dev(dinfos, mean)
         dinfos.sort(reverse=True)
+
+        # Create a json object as required by D3js Library
         for dinfo in dinfos:
             jobj = {}
             jobj["date"] = dinfo.d.strftime(self.SDM)
@@ -62,6 +84,12 @@ class ControlChartExample(object):
         return result
 
     def get_standard_dev(self,dateinfos, mean):
+        """
+        Get the standard deviation from the dateinfos object
+        :param dateinfos: 
+        :param mean: 
+        :return: 
+        """
         intsum = 0
         numperiods = len(dateinfos)
         for dinfo in dateinfos:
@@ -69,6 +97,11 @@ class ControlChartExample(object):
         return math.sqrt(float(intsum) / numperiods)
 
     def get_mean(self, date_infos):
+        """
+        Get the mean from the dateinfos object
+        :param date_infos: 
+        :return: 
+        """
         num_periods = len(date_infos)
         sum = 0
         for dinfo in date_infos:
@@ -76,7 +109,11 @@ class ControlChartExample(object):
         return float(sum) / num_periods
 
 @app.route('/getData', methods=['GET', 'POST'])
-def getData():
+def get_data():
+    """
+    Api Call to return the D3js object needed for visualization
+    :return: 
+    """
     global in_filename
     cce = ControlChartExample()
 
@@ -95,5 +132,8 @@ if __name__ == '__main__':
 
     argsi = parser.parse_args()
 
+    # Get the file name containing the tweets from the command line argument
     in_filename = argsi.i
+
+    # Run the flask app on port 5005
     app.run(port=5005)

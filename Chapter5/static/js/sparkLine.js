@@ -1,5 +1,4 @@
 var sparkline = {
-	script_location: 'getdata',
 
 
 GenerateSparkLines:function(data)

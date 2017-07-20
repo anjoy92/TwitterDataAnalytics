@@ -18,7 +18,13 @@ app = Flask(__name__ ,static_folder='../static')
 
 @app.route('/')
 def hello_world():
-   return send_from_directory('../templates/','TrendLineExample.html')
+    """
+    Returns the  TrendLineExample HTML file as First page.
+    The JS file being used for this page is: trendLine.js
+    The CSS file being used for this page is: trendLine.css
+    :return: The page to be rendered
+    """
+    return send_from_directory('../templates/','TrendLineExample.html')
 
 
 class ExtractDatasetTrend(object):
@@ -29,6 +35,8 @@ class ExtractDatasetTrend(object):
     def generate_data_trend(self, inFilename):
         result = []
         datecount = {}
+
+        # Open the tweet file and get the date count on each format
         with open(inFilename) as fp:
             for temp in fp:
                 jobj = json.loads(temp)
@@ -40,6 +48,8 @@ class ExtractDatasetTrend(object):
                 else:
                     datecount[strdate] = 1
         dinfos = []
+
+        # Iterate on keys and generate a DateInfo class object
         keys = set(datecount.keys())
         for key in keys:
             dinfo = DateInfo()
@@ -47,6 +57,8 @@ class ExtractDatasetTrend(object):
             dinfo.count = datecount[key]
             dinfos.append(dinfo)
         dinfos.sort(reverse=True)
+
+        # Create a json object as required by D3js Library
         for dinfo in dinfos:
             jobj = {}
             jobj["date"] = dinfo.d.strftime(self.SDM)
@@ -56,7 +68,11 @@ class ExtractDatasetTrend(object):
 
 
 @app.route('/getData', methods=['GET', 'POST'])
-def getData():
+def get_data():
+    """
+    Function to generate Simple Data Trend from tweet file given
+    :return: 
+    """
     global in_filename
     edt = ExtractDatasetTrend()
 
@@ -75,6 +91,8 @@ if __name__ == '__main__':
 
     argsi = parser.parse_args()
 
+    # Get the file name containing the tweets from the command line argument
     in_filename = argsi.i
 
+    # Run the flask app on port 5006
     app.run(port=5006)

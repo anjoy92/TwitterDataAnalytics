@@ -22,7 +22,13 @@ app = Flask(__name__ ,static_folder='../static')
 
 @app.route('/')
 def hello_world():
-   return send_from_directory('../templates/','RetweetNetworkExample.html')
+    """
+    Returns the RetweetNetworkExample HTML Page which is used for visualizing the data.
+    The JS file being used inside this HTML is : network.js
+    The CSS file being used inside this HTML is : graph.css
+    :return: The page to be rendered
+    """
+    return send_from_directory('../templates/','RetweetNetworkExample.html')
 
 
 class CreateD3Network(object):
@@ -37,9 +43,16 @@ class CreateD3Network(object):
         self.node_color_scheme = ["#A6BDDB", "#74A9CF", "#3690C0", "#0570B0", "#045A8D", "#023858"]
 
     def get_rt_users(self, text):
-
+        """
+        Get the Re Tweet user from the tweet text. @username is the retweeted user.
+        :param text: 
+        :return: 
+        """
         rt_users = []
+
+        # Regex to find the retweet user
         for nuser in re.findall(self.RTPATTERN, text, flags=re.IGNORECASE):
+            # Replace the rt @ text to get the username
             nuser = re.sub("rt @|RT @", "", nuser)
             rt_users.append(nuser.lower())
         return rt_users
@@ -54,9 +67,11 @@ class CreateD3Network(object):
         category_votes = {}
         tweet = tweet.lower()
         i = 0
+        # Iterate Categories
         for cat in usercategories:
             for s in cat.tags:
                 if s in tweet:
+                    # if s in this tweet , increase the category count/votes
                     if i in category_votes:
                         category_votes[i] = category_votes[i] + 1
                     else:
@@ -64,7 +79,7 @@ class CreateD3Network(object):
             i += 1
         keyset = set(category_votes.keys())
         maxvote = 0
-        # by default the tweet will be in the first category
+        # By default the tweet will be in the first category
         maxcategoryindex = 0
         for key in keyset:
             if category_votes[key] > maxvote:
@@ -117,6 +132,12 @@ class CreateD3Network(object):
         return maxcatID
 
     def node_size_comparator(self, o1, o2):
+        """
+        Compares the size attribute of the objects
+        :param o1: 
+        :param o2: 
+        :return: 
+        """
         size1 = o1.size
         size2 = o2.size
         if size1 > size2:
@@ -127,6 +148,12 @@ class CreateD3Network(object):
             return 0
 
     def node_id_comparator(self, o1, o2):
+        """
+        Compare the id attribute of the objects
+        :param o1: 
+        :param o2: 
+        :return: 
+        """
         id1 = o1.id
         id2 = o2.id
         if id1 > id2:
@@ -171,10 +198,13 @@ class CreateD3Network(object):
                         rtuserobj = rtstatus["user"]
                         fromusers.append(rtuserobj["screen_name"])
                 else:
+
                     # use the tweet text to retrieve the pattern "RT @username:"
                     fromusers = self.get_rt_users(text)
                 if not fromusers:
                     continue
+
+                # Removes rt @ from the text
                 t.text = TextUtils().remove_rt_elements(text)
                 if "user" in tweetobj:
                     userobj = tweetobj["user"]
@@ -282,35 +312,40 @@ class CreateD3Network(object):
                     counter = counter + 1
             finalnodes.append(nd)
         # generate the clusterids
-        # skipped
-
         finalnodes.sort(self.node_id_comparator)
-        #print len(finalnodes)
-        # for node in finalnodes:
-        #     print str(node.id) + " " + node.username + " " + str(node.level) + " " + str(
-        #         node.size) + " " + node.catColor + node.data[0]
 
         return self.get_d3_structure(finalnodes)
 
     def get_d3_structure(self, finalnodes):
+        """
+        Creates a D3 representation of the nodes, consisting of two JSONArray a set of nodes and a set of links between the nodes
+        :param finalnodes: 
+        :return: 
+        """
         alltweets = {}
         nodes = []
         links = []
         for node in finalnodes:
             nodedata = []
+            # Create Adjacencies
             for tnf in node.tonodes:
                 jsadj = {}
                 jsadj["source"] = node.id
                 jsadj["target"] = tnf.tonodeid
+                # Weight of the edge
                 jsadj["value"] = 1
+                # Class code is a unique id corresponding to the text
                 jsadj["data"] = tnf.class_code
                 links.append(jsadj)
+
+                # Create a data object for the node
                 jsdata = {}
                 jsdata["tonodeid"] = tnf.tonodeid
                 jsdata["nodefrom"] = node.username
                 jsdata["nodeto"] = tnf.tousername
                 jsdata["tweet"] = tnf.text
                 nodedata.append(jsdata)
+            # Add node
             nd = {}
             nd["name"] = node.username
             nd["group"] = node.group
@@ -326,6 +361,17 @@ class CreateD3Network(object):
         return alltweets
 
     def compute_groups_sqrt(self, nodes, max, min, noofclasses):
+        """
+        Divides a list of nodes into groups using the square root binning 
+        technique. If a node has size x and there are y groups in total. Then the
+        group of the node is computed as ceil((sqrt(x)/sqrt(max))*y), where max is
+        the size of the largest node.
+        :param nodes A list of nodes
+        :param max The maximum size of a node
+        :param min The minimum size of a node
+        :param noofclasses Number of classes into which the nodes must be classified
+        :return A list of nodes along with their class
+        """
         finalnodes = []
         for i in range(len(nodes)):
             node = nodes[i]
@@ -338,6 +384,13 @@ class CreateD3Network(object):
 
 
 def get_next_hop_connections(userconnections, cur_node, newnodes):
+    """
+    Recursively traverses the list of nodes to identify all nodes reachable from a starting node.
+    :param userconnections A map containing the usernames as keys and the node information as value
+    :param cur_node Node currently being processed.
+    :param newnodes A list of nodes which can be reached from the current node
+    :return A map of the usernames and the node information for all nodes reachable 
+    """
     cur_node.level = cur_node.level + 1
     newnodes[cur_node.username] = cur_node
     i = 0
@@ -353,7 +406,11 @@ def get_next_hop_connections(userconnections, cur_node, newnodes):
 
 
 @app.route('/getData', methods=['GET', 'POST'])
-def getData():
+def get_data():
+    """
+    Api Call to return the D3js object needed for visualization
+    :return: 
+    """
     global groups
     global infile_name
     cdn = CreateD3Network()
@@ -378,7 +435,11 @@ if __name__ == '__main__':
 
     argsi = parser.parse_args()
 
+    # Get input file name from the command line argument
     infile_name = argsi.i
 
+    # Load the groups as JSON object
     groups = json.loads(argsi.g)
+
+    # Start the Server
     app.run(port=5002)

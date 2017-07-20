@@ -1,5 +1,4 @@
 var trendcomp = {
-	script_location: 'jsp/TrendComparison.jsp',
 	margin: {top: 20, right: 80, bottom: 30, left: 50},
     width:null,
     height:null,

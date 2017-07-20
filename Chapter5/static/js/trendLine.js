@@ -1,5 +1,4 @@
 var trendline = {
-	script_location: 'jsp/TrendLine.jsp',
 	margin: {top: 10, right: 10, bottom: 100, left: 40},
     margin2: {top: 430, right: 10, bottom: 20, left: 40},
     width: null,

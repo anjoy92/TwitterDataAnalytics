@@ -16,7 +16,6 @@ var network_page = {
  num_classes: 7,
  //node_color_scheme: ["#A6BDDB","#74A9CF","#3690C0","#0570B0","#045A8D","#023858"],//removed white from the list
  //node_color_scheme4:["#CCEBC5","#A8DDB5","#7BCCC4","#4EB3D3","#2B8CBE","#0868AC","#084081"],//multi hue without bad colors seq 9 without white//"#E0F3DB",
- script_location:'jsp/NetworkFetcher.jsp',
  jsondata:{}, 
  net:null,
  nm:{}, //node map holds the new ids of the nodes

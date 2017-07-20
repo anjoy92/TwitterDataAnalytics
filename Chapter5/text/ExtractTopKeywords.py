@@ -75,12 +75,17 @@ def main(args):
 
     argsi = parser.parse_args()
 
+    # Get the file name containing the tweets from the command line argument
     infile_name = argsi.i
+
+    # Get the file name containing the stop words from the command line argument
     stopwords_file = argsi.s
 
-    tu.load_stop_words(stopwords_file)
-
+    # Get the number of words from the command line argument
     K = argsi.k
+
+    # Load the stop words
+    tu.load_stop_words(stopwords_file)
 
     print json.dumps(etk.get_top_keywords(infile_name, K, False, True, tu))
 
