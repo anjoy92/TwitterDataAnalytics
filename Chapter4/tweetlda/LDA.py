@@ -35,16 +35,16 @@ def main(args):
     argsi = parser.parse_args()
 
     # Get Number of Iterations on LDA from the command line argument
-    iterations = argsi.c
+    iterations = int(argsi.c)
 
     # Get Number of Topics from the command line argument
-    num_topics = argsi.n
+    num_topics = int(argsi.n)
 
     # Get Number of Words to analyze from the command line argument
-    num_words_to_analyze = argsi.w
+    num_words_to_analyze = int(argsi.w)
 
     # Get number of workers from the command line argument
-    num_workers = argsi.t
+    num_workers = int(argsi.t)
 
     # Get input file name from the command line argument
     infile_name = argsi.i

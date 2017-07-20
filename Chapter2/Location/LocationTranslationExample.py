@@ -80,14 +80,14 @@ def main(args):
         description='''Creates user access token and secret and saves it into config.json. Also verifies the key.''',
         epilog="""TweetTracker. Copyright (c) Arizona Board of Regents on behalf of Arizona State University\n@author Shobhit Sharma""",
         formatter_class=argparse.RawTextHelpFormatter)
-    parser.add_argument('locationString', nargs="?", default="Brickyard Building Tempe 85281",
+    parser.add_argument('-l', nargs="?", default="Brickyard Building Tempe 85281",
                         help='Give the location string/address')
     argsi = parser.parse_args()
 
     # Make class object and call the translation function
     # with the search string provided from command line.
     lte = LocationTranslationExample()
-    print lte.translate_loc(argsi.locationString)
+    print lte.translate_loc(argsi.l)
 
 
 if __name__ == "__main__":

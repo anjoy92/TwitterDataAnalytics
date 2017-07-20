@@ -13,4 +13,6 @@ class Location(object):
         self.longitude = float(lng)
 
     def __str__(self):
-        return "Latitude: " + str(self.latitude) + " & Longitude: " + str(self.longitude)
+        return "Latitude: " + str(self.latitude) + " & Longitude: " + str(self.longitude)+"\n"+\
+               "Use this url to look up on Google Maps:\n"+\
+               "https://www.google.com/maps/search/?api=1&query="+str(self.latitude)+","+str(self.longitude)

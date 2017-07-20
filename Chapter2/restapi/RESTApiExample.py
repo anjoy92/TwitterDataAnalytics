@@ -315,7 +315,7 @@ def main(args):
 
     # Get the type of call to be made from command line argument.
     # API Code. 0 for PROFILE_INFO , 1 for FOLLOWER_INFO , 2 for FRIEND_INFO , 3 for STATUSES_INFO
-    api_code = argsi.a
+    api_code = int(argsi.a)
 
     # Get the input file name from the command line argument
     infile_name = argsi.i

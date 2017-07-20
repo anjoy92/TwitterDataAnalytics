@@ -104,14 +104,16 @@ def get_data():
     :return: 
     """
     global in_filename
+    global words
     sle = SparkLineExample()
 
-    words = argsi.w
 
     return jsonify(sle.generate_data_trend(in_filename, words))
 
 
 if __name__ == '__main__':
+    global words
+    global in_filename
     parser = argparse.ArgumentParser(
         description='''Creates Spark Line data for visualization from the tweet file provided.''',
         epilog="""TweetTracker. Copyright (c) Arizona Board of Regents on behalf of Arizona State University\n@author Shobhit Sharma""",
@@ -125,6 +127,9 @@ if __name__ == '__main__':
 
     # Get the file name containing the tweets from the command line argument
     in_filename = argsi.i
+
+    # Get the keywords from the command line argument
+    words = argsi.w
 
     # Run the flask app on port 5007
     app.run(port=5007)

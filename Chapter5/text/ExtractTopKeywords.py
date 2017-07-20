@@ -130,7 +130,7 @@ if __name__ == "__main__":
     stopwords_file = argsi.s
 
     # Get the number of words from the command line argument
-    K = argsi.k
+    K = int(argsi.k)
 
     # Start the flask app on port 5004
     app.run(port=5004)

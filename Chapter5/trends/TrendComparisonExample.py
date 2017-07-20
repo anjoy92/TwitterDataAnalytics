@@ -101,6 +101,8 @@ def get_data():
 
 
 if __name__ == '__main__':
+    global words
+    global in_filename
     parser = argparse.ArgumentParser(
         description='''Creates data for visualizing Trend Comparison.''',
         epilog="""TweetTracker. Copyright (c) Arizona Board of Regents on behalf of Arizona State University\n@author Shobhit Sharma""",
