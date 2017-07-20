@@ -1,5 +1,4 @@
 # Twitter Data Analytics
----
 This Project is a Python(2.7) implementation of the Chapters in the book [Twitter Data Analytics](http://tweettracker.fulton.asu.edu/tda/). This implementation covers:
 1. Twitter REST API usage.
 2. Twitter Streaming API usage.
@@ -15,7 +14,6 @@ This Project is a Python(2.7) implementation of the Chapters in the book [Twitte
 Social media has become a major platform for information sharing. Due to its openness in sharing data, Twitter is a prime example of social media in which researchers can verify their hypotheses, and practitioners can mine interesting patterns and build realworld applications. This book takes a reader through the process of harnessing Twitter data to find answers to intriguing questions. We begin with an introduction to the process of collecting data through Twitter's APIs and proceed to discuss strategies for curating large datasets. We then guide the reader through the process of visualizing Twitter data with realworld examples, present challenges and complexities of building visual analytic tools, and provide strategies to address these issues. We show by example how some powerful measures can be computed using various Twitter data sources. This book is designed to provide researchers, practitioners, project managers, and graduate students new to the field with an entry point to jump start their endeavors. It also serves as a convenient reference for readers seasoned in Twitter data analysis.
 
 ## Installation
------
 This software depends on few python packages for scientific computing. You must have them installed prior to running the project. 
 The simple way to install these packages is running pip in requirements.txt file in the project:
 ```
@@ -25,7 +23,6 @@ Note: Run with sudo or admin priviledges if the command fails.
 Note: If facing problem while install gensim in windows. Try installing using wheel file. [Link to whl](http://www.lfd.uci.edu/~gohlke/pythonlibs/#gensim)
 
 ## Book Chapter Mapping
----
 The files mentioned in this Tree Mapping directory structure are the runnable python files of the project. The Chapter Mapping refers to the chapter where the book is explaining the concept being implemented in the python file.
 ```
 .
@@ -67,7 +64,6 @@ The files mentioned in this Tree Mapping directory structure are the runnable py
         └── TrendComparisonExample.py ──────────────────    5.2.2
 ```
 ## Getting Started
----
 ### Setup
 
 The first thing needs to be done is creating a Twitter API consumer key. This can be done by creating an application: https://apps.twitter.com/
@@ -118,17 +114,14 @@ TweetTracker. Copyright (c) Arizona Board of Regents on behalf of Arizona State 
 @author Shobhit Sharma
 ```
 ## Support
------
 Send a mail to Shobhit Sharma ( sshar107@asu.edu ) to report any issue or if facing problem while running the project.
 ## Authors
----
 **Python Code Author**: [Shobhit Sharma](https://www.linkedin.com/in/shosharma)
 **Book Authors**: [Shamanth Kumar](http://www.public.asu.edu/~skumar34/), [Fred Morstatter](http://www.public.asu.edu/~fmorstat/), and [Huan Liu](http://www.public.asu.edu/~huanliu/)
 Data Mining and Machine Learning Lab
 School of Computing, Informatics, and Decision Systems Engineering
 Arizona State University
 ## Citing Book
----
 ### MLA
 ```
 Kumar, Shamanth, Morstatter, Fred, and Huan Liu. Twitter Data Analytics. Springer, 2013.
