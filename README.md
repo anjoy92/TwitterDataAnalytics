@@ -11,6 +11,7 @@ This Project is a Python(2.7) implementation of the Chapters in the book [Twitte
 9. Trend Visualizations.
 
 **About Book**
+
 Social media has become a major platform for information sharing. Due to its openness in sharing data, Twitter is a prime example of social media in which researchers can verify their hypotheses, and practitioners can mine interesting patterns and build realworld applications. This book takes a reader through the process of harnessing Twitter data to find answers to intriguing questions. We begin with an introduction to the process of collecting data through Twitter's APIs and proceed to discuss strategies for curating large datasets. We then guide the reader through the process of visualizing Twitter data with realworld examples, present challenges and complexities of building visual analytic tools, and provide strategies to address these issues. We show by example how some powerful measures can be computed using various Twitter data sources. This book is designed to provide researchers, practitioners, project managers, and graduate students new to the field with an entry point to jump start their endeavors. It also serves as a convenient reference for readers seasoned in Twitter data analysis.
 
 ## Installation
