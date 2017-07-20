@@ -117,7 +117,9 @@ TweetTracker. Copyright (c) Arizona Board of Regents on behalf of Arizona State 
 Send a mail to Shobhit Sharma ( sshar107@asu.edu ) to report any issue or if facing problem while running the project.
 ## Authors
 **Python Code Author**: [Shobhit Sharma](https://www.linkedin.com/in/shosharma)
+
 **Book Authors**: [Shamanth Kumar](http://www.public.asu.edu/~skumar34/), [Fred Morstatter](http://www.public.asu.edu/~fmorstat/), and [Huan Liu](http://www.public.asu.edu/~huanliu/)
+
 Data Mining and Machine Learning Lab
 School of Computing, Informatics, and Decision Systems Engineering
 Arizona State University
