@@ -1,6 +1,9 @@
-oauth2
-stop_words
-nltk
-gensim
-networkx
-matplotlib
+requests==2.13.0
+Flask==0.12
+oauth2==1.9.0.post1
+nltk==3.2.4
+gensim==2.0.0
+requests_oauthlib==0.8.0
+stop_words==2015.2.23.1
+networkx==1.11
+matplotlib==1.5.1
